@@ -3,9 +3,12 @@
 {% block content %}
     <h1>Edit your profile</h1>
     <br/>
+    {% for message in messages %}
+        {{ message }}
+    {% endfor %}
     <div class="row">
         <div class="col-xs-4">
-            <form method="post">
+            <form method="post" action="{% url 'edit_profile' %}">
                 {% csrf_token %}
                 <div class="form-group">
                     {{ form.username }}

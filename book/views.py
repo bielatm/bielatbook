@@ -5,6 +5,7 @@ from .models import UserProfile
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import update_session_auth_hash
 
 from django.contrib import messages
 
@@ -57,14 +58,26 @@ def home_page(request):
 
 @login_required
 def edit_profile(request):
-    profile = request.user
+    user = request.user
+    profile = request.user.userprofile
+    form = SignUpForm(initial={'username': user.username, 'first_name': user.first_name, 'last_name': user.last_name,
+                               'email': user.email, 'city': profile.city, 'country': profile.country,
+                               'date_of_birth': profile.date_of_birth, 'description': profile.description})
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            profile = form.save()
+            user.username = form.cleaned_data.get('username')
+            user.first_name = form.cleaned_data.get('first_name')
+            user.last_name = form.cleaned_data.get('last_name')
+            user.email = form.cleaned_data.get('email')
+            user.password = make_password(form.cleaned_data.get('password'))
+            user.save()
+            profile.user_id = user
+            profile.city = form.cleaned_data.get('city')
+            profile.country = form.cleaned_data.get('country')
+            profile.date_of_birth = form.cleaned_data.get('date_of_birth')
+            profile.description = form.cleaned_data.get('description')
             profile.save()
-            print(profile.city)
-            return redirect('home_page')
-    else:
-        form = SignUpForm()
+            update_session_auth_hash(request, user)
+            messages.add_message(request, messages.INFO, 'OK')
     return render(request, 'book/edit_profile.html', {'form': form})
