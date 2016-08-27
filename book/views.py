@@ -53,3 +53,18 @@ def logout_view(request):
 @login_required
 def home_page(request):
     return render(request, 'book/home_page.html', {})
+
+
+@login_required
+def edit_profile(request):
+    profile = request.user
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            profile = form.save()
+            profile.save()
+            print(profile.city)
+            return redirect('home_page')
+    else:
+        form = SignUpForm()
+    return render(request, 'book/edit_profile.html', {'form': form})
