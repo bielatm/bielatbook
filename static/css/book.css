@@ -28,3 +28,8 @@ h1, h2, h3, h4 {
 .registration {
     float: right;
 }
+
+.invalid-credentials {
+    font-size: 12pt;
+    color: red;
+}

@@ -9,16 +9,21 @@
     </head>
     <body>
         <div class="page-header">
-            <form class="form-inline top-menu">
+            <form method="post" action="{% url 'login' %}" class="form-inline top-menu">
+                {% csrf_token %}
                 <div class="form-group">
-                    <label class="sr-only" for="username">User name</label>
-                    <input type="text" class="form-control" id="username" placeholder="User name">
+                    {{ form.username }}
                 </div>
                 <div class="form-group">
-                    <label class="sr-only" for="password">Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="Password">
+                    {{ form.password }}
                 </div>
-                <button type="submit" class="btn btn-default">Log In</button>
+                <input type="submit" class="btn btn-default" value="Log In">
+                <br/>
+                <div class="invalid-credentials">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
             </form>
             <h1>bielatbook</h1>
         </div>
@@ -27,44 +32,60 @@
             <br/>
             <div class="row">
                 <div class="col-xs-4">
-                    <form method="post" action="{% url 'register' %}">
+                    <form id="SignUpForm" method="post" action="{% url 'register' %}">
                         {% csrf_token %}
                         <div class="form-group">
                             {{ form.username }}
-                            {{ form.username.errors }}
+                            <div class="text-danger">
+                                {{ form.username.errors }}
+                            </div>
                         </div>
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-xs-6">
                                     {{ form.first_name }}
-                                    {{ form.first_name.errors }}
+                                    <div class="text-danger">
+                                        {{ form.first_name.errors }}
+                                    </div>
                                 </div>
                                 <div class="col-xs-6">
                                     {{ form.last_name }}
-                                    {{ form.last_name.errors }}
+                                    <div class="text-danger">
+                                        {{ form.last_name.errors }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             {{ form.email }}
-                            {{ form.email.errors }}
+                            <div class="text-danger">
+                                {{ form.email.errors }}
+                            </div>
                         </div>
                         <div class="form-group">
                             {{ form.password }}
-                            {{ form.password.errors }}
+                            <div class="text-danger">
+                                {{ form.password.errors }}
+                            </div>
                         </div>
                         <div class="form-group">
                             {{ form.city }}
-                            {{ form.city.errors }}
+                            <div class="text-danger">
+                                {{ form.city.errors }}
+                            </div>
                         </div>
                         <div class="form-group">
                             {{ form.country }}
-                            {{ form.country.errors }}
+                            <div class="text-danger">
+                                {{ form.country.errors }}
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>Date of birth</label>
                             {{ form.date_of_birth }}
-                            {{ form.date_of_birth.errors }}
+                            <div class="text-danger">
+                                {{ form.date_of_birth.errors }}
+                            </div>
                         </div>
                         <div class="form-group">
                             {{ form.description }}

@@ -3,6 +3,10 @@ from .forms import SignUpForm
 from django.contrib.auth.models import User
 from .models import UserProfile
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.decorators import login_required
+
+from django.contrib import messages
 
 
 def register(request):
@@ -14,7 +18,7 @@ def register(request):
             user.first_name = form.cleaned_data.get('first_name')
             user.last_name = form.cleaned_data.get('last_name')
             user.email = form.cleaned_data.get('email')
-            user.password = form.cleaned_data.get('password')
+            user.password = make_password(form.cleaned_data.get('password'))
             user.save()
             userprofile = UserProfile()
             userprofile.user_id = user
@@ -33,16 +37,19 @@ def login_view(request):
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(username=username, password=password)
-    if user is not None:
+    if user:
         login(request, user)
         return redirect('home_page')
     else:
-        return render(request, 'registration/registration.html', {})
+        messages.add_message(request, messages.INFO, '*Invalid credentials')
+        return redirect('register')
 
 
 def logout_view(request):
     logout(request)
+    return redirect('register')
 
 
+@login_required
 def home_page(request):
     return render(request, 'book/home_page.html', {})
