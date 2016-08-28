@@ -14,19 +14,17 @@ def register(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            user = User()
-            user.username = form.cleaned_data.get('username')
-            user.first_name = form.cleaned_data.get('first_name')
-            user.last_name = form.cleaned_data.get('last_name')
-            user.email = form.cleaned_data.get('email')
-            user.password = make_password(form.cleaned_data.get('password'))
+            user = User(username=form.cleaned_data.get('username'),
+                        first_name=form.cleaned_data.get('first_name'),
+                        last_name=form.cleaned_data.get('last_name'),
+                        email=form.cleaned_data.get('email'),
+                        password=make_password(form.cleaned_data.get('password')))
             user.save()
-            userprofile = UserProfile()
-            userprofile.user_id = user
-            userprofile.city = form.cleaned_data.get('city')
-            userprofile.country = form.cleaned_data.get('country')
-            userprofile.date_of_birth = form.cleaned_data.get('date_of_birth')
-            userprofile.description = form.cleaned_data.get('description')
+            userprofile = UserProfile(user_id=user,
+                                      city=form.cleaned_data.get('city'),
+                                      country=form.cleaned_data.get('country'),
+                                      date_of_birth=form.cleaned_data.get('date_of_birth'),
+                                      description=form.cleaned_data.get('description'))
             userprofile.save()
             return redirect('register')
     else:
