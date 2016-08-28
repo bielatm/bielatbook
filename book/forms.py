@@ -13,6 +13,9 @@ class UserProfileForm(forms.Form):
                                                                            'placeholder': 'Email'}))
     password = forms.CharField(required=True, widget=forms.PasswordInput(attrs={'class': 'form-control',
                                                                                 'placeholder': 'Password'}))
+    confirm_password = forms.CharField(required=True, widget=forms.PasswordInput(attrs={'class': 'form-control',
+                                                                                        'placeholder':
+                                                                                            'Confirm password'}))
     date_of_birth = forms.DateField(required=True, widget=forms.DateInput(attrs={'class': 'form-control',
                                                                                  'type': 'date'}))
     city = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control',
@@ -28,3 +31,8 @@ class UserProfileForm(forms.Form):
         if User.objects.filter(username=username).exists():
             raise forms.ValidationError("Username already exists")
         return username
+
+    def clean_confirm_password(self):
+        if self.data['password'] != self.data.get('confirm_password'):
+            raise forms.ValidationError("Passwords don't match")
+        return self.data['confirm_password']
