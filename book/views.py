@@ -6,7 +6,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
-
 from django.contrib import messages
 
 
@@ -26,6 +25,7 @@ def register(request):
                                       date_of_birth=form.cleaned_data.get('date_of_birth'),
                                       description=form.cleaned_data.get('description'))
             userprofile.save()
+            messages.add_message(request, messages.INFO, 'You have been registered. You can now log in.')
             return redirect('register')
     else:
         form = SignUpForm()
@@ -40,7 +40,7 @@ def login_view(request):
         login(request, user)
         return redirect('home_page')
     else:
-        messages.add_message(request, messages.INFO, '*Invalid credentials')
+        messages.add_message(request, messages.ERROR, '*Invalid credentials')
         return redirect('register')
 
 
@@ -77,5 +77,5 @@ def edit_profile(request):
             profile.description = form.cleaned_data.get('description')
             profile.save()
             update_session_auth_hash(request, user)
-            messages.add_message(request, messages.INFO, 'OK')
+            messages.add_message(request, messages.INFO, 'Your personal data has been saved.')
     return render(request, 'book/edit_profile.html', {'form': form})
