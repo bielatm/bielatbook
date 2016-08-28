@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import User
 
 
 class UserProfileForm(forms.Form):
@@ -21,3 +22,9 @@ class UserProfileForm(forms.Form):
     description = forms.CharField(required=False, widget=forms.Textarea(attrs={'class': 'form-control',
                                                                                'placeholder': 'Description',
                                                                                'rows': '3'}))
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("Username already exists")
+        return username
