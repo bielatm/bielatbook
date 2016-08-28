@@ -41,10 +41,10 @@
                             {% for message in messages %}
                                 {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
                                     {{ message }}
+                                    <br/>
                                 {% endif %}
                             {% endfor %}
                         </div>
-                        <br/>
                         {% include 'book/userprofile_form.html' %}
                         <input type="submit" class="btn btn-success" value="Sign Up">
                     </form>
