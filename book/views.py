@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import SignUpForm
+from .forms import UserProfileForm
 from django.contrib.auth.models import User
 from .models import UserProfile
 from django.contrib.auth import authenticate, login, logout
@@ -11,7 +11,7 @@ from django.contrib import messages
 
 def register(request):
     if request.method == 'POST':
-        form = SignUpForm(request.POST)
+        form = UserProfileForm(request.POST)
         if form.is_valid():
             user = User(username=form.cleaned_data.get('username'),
                         first_name=form.cleaned_data.get('first_name'),
@@ -28,7 +28,7 @@ def register(request):
             messages.add_message(request, messages.INFO, 'You have been registered. You can now log in.')
             return redirect('register')
     else:
-        form = SignUpForm()
+        form = UserProfileForm()
     return render(request, 'registration/registration.html', {'form': form})
 
 
@@ -58,11 +58,12 @@ def home_page(request):
 def edit_profile(request):
     user = request.user
     profile = request.user.userprofile
-    form = SignUpForm(initial={'username': user.username, 'first_name': user.first_name, 'last_name': user.last_name,
-                               'email': user.email, 'city': profile.city, 'country': profile.country,
-                               'date_of_birth': profile.date_of_birth, 'description': profile.description})
+    form = UserProfileForm(initial={'username': user.username, 'first_name': user.first_name,
+                                    'last_name': user.last_name, 'email': user.email, 'city': profile.city,
+                                    'country': profile.country, 'date_of_birth': profile.date_of_birth,
+                                    'description': profile.description})
     if request.method == 'POST':
-        form = SignUpForm(request.POST)
+        form = UserProfileForm(request.POST)
         if form.is_valid():
             user.username = form.cleaned_data.get('username')
             user.first_name = form.cleaned_data.get('first_name')

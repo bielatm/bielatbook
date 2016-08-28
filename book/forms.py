@@ -1,7 +1,7 @@
 from django import forms
 
 
-class SignUpForm(forms.Form):
+class UserProfileForm(forms.Form):
     username = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control',
                                                                             'placeholder': 'User name'}))
     first_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control',
@@ -18,5 +18,6 @@ class SignUpForm(forms.Form):
                                                                         'placeholder': 'City'}))
     country = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control',
                                                                            'placeholder': 'Country'}))
-    description = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control',
-                                                               'placeholder': 'Description', 'rows': '3'}))
+    description = forms.CharField(required=False, widget=forms.Textarea(attrs={'class': 'form-control',
+                                                                               'placeholder': 'Description',
+                                                                               'rows': '3'}))

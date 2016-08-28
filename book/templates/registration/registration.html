@@ -38,11 +38,11 @@
                     <form method="post" action="{% url 'register' %}">
                         {% csrf_token %}
                         <div class="text-success">
-                            {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
-                                {% for message in messages %}
+                            {% for message in messages %}
+                                {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
                                     {{ message }}
-                                {% endfor %}
-                            {% endif %}
+                                {% endif %}
+                            {% endfor %}
                         </div>
                         <br/>
                         {% include 'book/userprofile_form.html' %}
