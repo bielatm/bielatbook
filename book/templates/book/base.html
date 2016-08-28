@@ -1,4 +1,5 @@
-{% load staticfiles %}
+{% extends 'main_template.html' %}
+<!--{% load staticfiles %}
 <html>
     <head>
         <title>bielatbook</title>
@@ -8,7 +9,8 @@
         <link rel="stylesheet" href="{% static 'css/book.css' %}">
         <link rel="shortcut icon" href="/static/favicon.ico">
     </head>
-    <body>
+    <body>-->
+{% block outercontent %}
         <div class="page-header">
             <a href="{% url 'logout' %}" class="top-menu"><span class="glyphicon glyphicon-log-out"></span></a>
             <a href="{% url 'edit_profile' %}" class="top-menu"><span class="glyphicon glyphicon-edit"></span></a>
@@ -19,5 +21,7 @@
             {% block content %}
             {% endblock %}
         </div>
+{% endblock %}
+<!--
     </body>
-</html>
+</html>-->
