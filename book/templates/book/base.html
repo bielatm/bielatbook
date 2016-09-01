@@ -1,15 +1,5 @@
 {% extends 'main_template.html' %}
-<!--{% load staticfiles %}
-<html>
-    <head>
-        <title>bielatbook</title>
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-        <link href="//fonts.googleapis.com/css?family=Pacifico&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-        <link rel="stylesheet" href="{% static 'css/book.css' %}">
-        <link rel="shortcut icon" href="/static/favicon.ico">
-    </head>
-    <body>-->
+
 {% block outercontent %}
         <div class="page-header">
             <a href="{% url 'logout' %}" class="top-menu"><span class="glyphicon glyphicon-log-out"></span></a>
@@ -23,6 +13,3 @@
             {% endblock %}
         </div>
 {% endblock %}
-<!--
-    </body>
-</html>-->
