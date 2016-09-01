@@ -1,7 +1,59 @@
 {% extends 'book/base.html' %}
 
 {% block content %}
-    <table class="table table-hover">
+    <div class="row">
+        <div class="col-xs-11">
+            <div class="panel panel-default">
+                <div class="panel-heading"><b>Find your friends!</b></div>
+                <div class="panel-body">
+                    <p>Opis</p>
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>City</th>
+                            <th>Country</th>
+                            <th>Date of Birth</th>
+                            <th>Invitation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>{{ user.first_name }} {{ user.last_name }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.userprofile.city }}</td>
+                                <td>{{ user.userprofile.country }}</td>
+                                <td>{{ user.userprofile.date_of_birth }}</td>
+                                <td>
+                                    <a class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add to friends</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if users.has_previous %}
+            <a href="?page={{ users.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ users.number }} of {{ users.paginator.num_pages }}.
+        </span>
+
+        {% if users.has_next %}
+            <a href="?page={{ users.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+    <!--<table class="table table-hover">
         <thead>
             <tr>
                 <th>Name</th>
@@ -26,5 +78,5 @@
                 </tr>
             {% endfor %}
         </tbody>
-    </table>
+    </table>-->
 {% endblock %}

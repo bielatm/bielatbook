@@ -10,3 +10,8 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user_id.username
+
+
+class FriendshipInvite(models.Model):
+    user = models.ForeignKey('auth.User', related_name='sent_friendship_invites')
+    friend = models.ForeignKey('auth.User', related_name='received_friendship_invites')

@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.db.models import Q
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def register(request):
@@ -85,5 +86,13 @@ def edit_profile(request):
 
 @login_required
 def find_friends(request):
-    users = User.objects.filter(~Q(username=request.user.username), is_superuser=False).order_by('first_name')
+    users_list = User.objects.filter(~Q(username=request.user.username), is_superuser=False).order_by('first_name')
+    paginator = Paginator(users_list, 5)
+    page = request.GET.get('page')
+    try:
+        users = paginator.page(page)
+    except PageNotAnInteger:
+        users = paginator.page(1)
+    except EmptyPage:
+        users = paginator.page(paginator.num_pages)
     return render(request, 'book/find_friends.html', {'users': users})
