@@ -7,6 +7,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
+from django.db.models import Q
 
 
 def register(request):
@@ -80,3 +81,9 @@ def edit_profile(request):
             update_session_auth_hash(request, user)
             messages.add_message(request, messages.INFO, 'Your personal data has been saved.')
     return render(request, 'book/edit_profile.html', {'form': form})
+
+
+@login_required
+def find_friends(request):
+    users = User.objects.filter(~Q(username=request.user.username), is_superuser=False).order_by('first_name')
+    return render(request, 'book/find_friends.html', {'users': users})
