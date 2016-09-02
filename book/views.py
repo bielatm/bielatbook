@@ -87,7 +87,7 @@ def edit_profile(request):
 @login_required
 def find_friends(request):
     users_list = User.objects.filter(~Q(username=request.user.username), is_superuser=False).order_by('first_name')
-    paginator = Paginator(users_list, 5)
+    paginator = Paginator(users_list, 3)
     page = request.GET.get('page')
     try:
         users = paginator.page(page)
