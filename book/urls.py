@@ -8,5 +8,6 @@ urlpatterns = [
     url(r'^home/$', views.home_page, name='home_page'),
     url(r'^edit-profile/$', views.edit_profile, name='edit_profile'),
     url(r'^find-friends/$', views.find_friends, name='find_friends'),
-    url(r'^accept-invitations$', views.accept_invitations, name='accept_invitations'),
+    url(r'^accept-invitations/$', views.accept_invitations, name='accept_invitations'),
+    url(r'^friends/$', views.list_friends, name='list_friends'),
 ]

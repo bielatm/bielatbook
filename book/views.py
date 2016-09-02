@@ -88,7 +88,8 @@ def edit_profile(request):
 def find_friends(request):
     user = request.user
     invited_users_ids = [f.friend_id for f in user.sent_friendship_invites.all()]
-    uninvited_users = User.objects.filter(~Q(id__in=invited_users_ids + [request.user.id]),
+    friends_ids = [f.user_id for f in user.friendships.all()]
+    uninvited_users = User.objects.filter(~Q(id__in=invited_users_ids + [request.user.id] + friends_ids),
                                           is_superuser=False).order_by('first_name')
     paginator = Paginator(uninvited_users, 3)
     page = request.GET.get('page')
@@ -127,3 +128,18 @@ def accept_invitations(request):
         friendship.delete()
         return redirect('accept_invitations')
     return render(request, 'book/invitations.html', {'invitations': invitations})
+
+
+@login_required
+def list_friends(request):
+    user = request.user
+    friends_list = [f.user for f in user.friendships.all()]
+    paginator = Paginator(friends_list, 3)
+    page = request.GET.get('page')
+    try:
+        friends = paginator.page(page)
+    except PageNotAnInteger:
+        friends = paginator.page(1)
+    except EmptyPage:
+        friends = paginator.page(paginator.num_pages)
+    return render(request, 'book/list_friends.html', {'friends': friends})

@@ -5,7 +5,7 @@
             <a href="{% url 'logout' %}" class="top-menu"><span class="glyphicon glyphicon-log-out"></span></a>
             <a href="{% url 'edit_profile' %}" class="top-menu"><span class="glyphicon glyphicon-edit"></span></a>
             <a href="" class="top-menu"><span class="glyphicon glyphicon-envelope"></span></a>
-            <a href="" class="top-menu"><span class="glyphicon glyphicon-user"></span></a>
+            <a href="{% url 'list_friends' %}" class="top-menu"><span class="glyphicon glyphicon-user"></span></a>
             <a href="{% url 'accept_invitations' %}" class="top-menu"><span class="glyphicon glyphicon-globe"></span></a>
             <a href="{% url 'find_friends' %}" class="top-menu"><span class="glyphicon glyphicon-search"></span></a>
             <p class="top-menu welcome"><small>{{ user.first_name }}</small></p>
