@@ -1,6 +1,11 @@
 {% extends 'book/base.html' %}
 
 {% block content %}
+    <div class="text-success">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
     <div class="row">
         <div class="col-xs-11">
             <div class="panel panel-info">
@@ -28,7 +33,15 @@
                                 <td>{{ user.userprofile.country }}</td>
                                 <td>{{ user.userprofile.date_of_birth }}</td>
                                 <td>
-                                    <a class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Add to friends</a>
+                                    <form method="post" action="{% url 'find_friends' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <input class="hidden" name="friend_id" value={{ user.id }}>
+                                            <button type="submit" class="btn btn-success">
+                                                <span class="glyphicon glyphicon-plus"></span> Add to friends
+                                            </button>
+                                        </div>
+                                    </form>
                                 </td>
                             </tr>
                         {% endfor %}

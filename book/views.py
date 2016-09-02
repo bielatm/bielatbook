@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import SignUpForm, UserProfileForm
 from django.contrib.auth.models import User
-from .models import UserProfile
+from .models import UserProfile, FriendshipInvite
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
@@ -86,8 +86,11 @@ def edit_profile(request):
 
 @login_required
 def find_friends(request):
-    users_list = User.objects.filter(~Q(username=request.user.username), is_superuser=False).order_by('first_name')
-    paginator = Paginator(users_list, 3)
+    user = request.user
+    invited_users_ids = [fi.friend_id for fi in request.user.sent_friendship_invites.all()]
+    uninvited_users = User.objects.filter(~Q(id__in=invited_users_ids + [request.user.id]),
+                                          is_superuser=False).order_by('first_name')
+    paginator = Paginator(uninvited_users, 3)
     page = request.GET.get('page')
     try:
         users = paginator.page(page)
@@ -95,4 +98,11 @@ def find_friends(request):
         users = paginator.page(1)
     except EmptyPage:
         users = paginator.page(paginator.num_pages)
+    if request.method == 'POST':
+        friendship = FriendshipInvite(user_id=user.id, friend_id=request.POST['friend_id'])
+        friendship.save()
+        friend = User.objects.get(id=request.POST['friend_id'])
+        messages.add_message(request, messages.INFO, 'You added ' + friend.first_name + ' '
+                             + friend.last_name + ' to your friends.')
+        return redirect('find_friends')
     return render(request, 'book/find_friends.html', {'users': users})
