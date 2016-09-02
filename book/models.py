@@ -15,3 +15,8 @@ class UserProfile(models.Model):
 class FriendshipInvite(models.Model):
     user = models.ForeignKey('auth.User', related_name='sent_friendship_invites')
     friend = models.ForeignKey('auth.User', related_name='received_friendship_invites')
+
+
+class Friendship(models.Model):
+    user = models.ForeignKey('auth.User')
+    friend = models.ForeignKey('auth.User', related_name='friendships')

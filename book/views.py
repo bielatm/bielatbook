@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import SignUpForm, UserProfileForm
 from django.contrib.auth.models import User
-from .models import UserProfile, FriendshipInvite
+from .models import UserProfile, FriendshipInvite, Friendship
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
@@ -87,7 +87,7 @@ def edit_profile(request):
 @login_required
 def find_friends(request):
     user = request.user
-    invited_users_ids = [fi.friend_id for fi in request.user.sent_friendship_invites.all()]
+    invited_users_ids = [f.friend_id for f in user.sent_friendship_invites.all()]
     uninvited_users = User.objects.filter(~Q(id__in=invited_users_ids + [request.user.id]),
                                           is_superuser=False).order_by('first_name')
     paginator = Paginator(uninvited_users, 3)
@@ -106,3 +106,24 @@ def find_friends(request):
                              + friend.last_name + ' to your friends.')
         return redirect('find_friends')
     return render(request, 'book/find_friends.html', {'users': users})
+
+
+@login_required
+def accept_invitations(request):
+    user = request.user
+    received_invitations = user.received_friendship_invites.all()
+    paginator = Paginator(received_invitations, 3)
+    page = request.GET.get('page')
+    try:
+        invitations = paginator.page(page)
+    except PageNotAnInteger:
+        invitations = paginator.page(1)
+    except EmptyPage:
+        invitations = paginator.page(paginator.num_pages)
+    if request.method == 'POST':
+        friendship = FriendshipInvite.objects.get(id=request.POST['friendship_id'])
+        Friendship(user=friendship.user, friend=friendship.friend).save()
+        Friendship(user=friendship.friend, friend=friendship.user).save()
+        friendship.delete()
+        return redirect('accept_invitations')
+    return render(request, 'book/invitations.html', {'invitations': invitations})
