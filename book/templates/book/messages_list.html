@@ -1,0 +1,10 @@
+{% extends 'book/base.html' %}
+
+{% block content %}
+    {% for message in messages_from_friends %}
+        <div>
+            <h1>{{ message.author }}</h1>
+            <p>{{ message.text }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}

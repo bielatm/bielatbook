@@ -20,3 +20,9 @@ class FriendshipInvite(models.Model):
 class Friendship(models.Model):
     user = models.ForeignKey('auth.User')
     friend = models.ForeignKey('auth.User', related_name='friendships')
+
+
+class Message(models.Model):
+    author = models.ForeignKey('auth.User')
+    text = models.TextField()
+    receiver = models.ForeignKey('auth.User', related_name='messages')

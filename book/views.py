@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import SignUpForm, UserProfileForm
 from django.contrib.auth.models import User
-from .models import UserProfile, FriendshipInvite, Friendship
+from .models import UserProfile, FriendshipInvite, Friendship, Message
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
@@ -131,10 +131,11 @@ def accept_invitations(request):
 
 
 @login_required
-def list_friends(request):
+def friends_list(request):
     user = request.user
-    friends_list = [f.user for f in user.friendships.all()]
-    paginator = Paginator(friends_list, 3)
+    buddys_list = [f.user for f in user.friendships.all()]
+    buddys_list.sort(key=lambda x: x.first_name, reverse=False)
+    paginator = Paginator(buddys_list, 3)
     page = request.GET.get('page')
     try:
         friends = paginator.page(page)
@@ -142,4 +143,11 @@ def list_friends(request):
         friends = paginator.page(1)
     except EmptyPage:
         friends = paginator.page(paginator.num_pages)
-    return render(request, 'book/list_friends.html', {'friends': friends})
+    return render(request, 'book/friends_list.html', {'friends': friends})
+
+
+@login_required
+def messages_list(request):
+    user = request.user
+    messages_from_friends = user.messages.all()
+    return render(request, 'book/messages_list.html', {'messages_from_friends': messages_from_friends})

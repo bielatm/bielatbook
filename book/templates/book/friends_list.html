@@ -41,9 +41,9 @@
 
     <nav aria-label="Page navigation">
         <ul class="pagination">
-            {% if users.has_previous %}
+            {% if friends.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ users.previous_page_number }}" aria-label="Previous">
+                    <a class="page-link" href="?page={{ friends.previous_page_number }}" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                         <span class="sr-only">Previous</span>
                     </a>
@@ -52,17 +52,17 @@
                 <li class="disabled"><a href="#">&laquo;</a></li>
             {% endif %}
 
-            {% for num in users.paginator.page_range %}
-                {% ifequal num users.number %}
+            {% for num in friends.paginator.page_range %}
+                {% ifequal num friends.number %}
                     <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
                 {% else %}
                     <li><a href="?page={{ num }}">{{ num }}</a></li>
                 {% endifequal %}
             {% endfor %}
 
-            {% if users.has_next %}
+            {% if friends.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ users.next_page_number }}" aria-label="Next">
+                    <a class="page-link" href="?page={{ friends.next_page_number }}" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                         <span class="sr-only">Next</span>
                     </a>
