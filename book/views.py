@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import SignUpForm, UserProfileForm
+from .forms import SignUpForm, UserProfileForm, MessageForm
 from django.contrib.auth.models import User
 from .models import UserProfile, FriendshipInvite, Friendship, Message
 from django.contrib.auth import authenticate, login, logout
@@ -151,3 +151,19 @@ def messages_list(request):
     user = request.user
     messages_from_friends = user.messages.all()
     return render(request, 'book/messages_list.html', {'messages_from_friends': messages_from_friends})
+
+
+def new_message(request):
+    user = request.user
+    friends = [f.user for f in user.friendships.all()]
+    if request.method == "POST":
+        form = MessageForm(request.POST, receiver_ids=[(f.id, '{0} {1}'.format(f.first_name, f.last_name)) for f in friends])
+        if form.is_valid():
+            message = Message(author=user,
+                              text=form.cleaned_data.get('text'),
+                              receiver_id=form.cleaned_data.get('receiver_id'))
+            message.save()
+            return redirect('friends_list')
+    else:
+        form = MessageForm(receiver_ids=[(f.id, '{0} {1}'.format(f.first_name, f.last_name)) for f in friends])
+    return render(request, 'book/new_message.html', {'form': form, 'friends': friends})

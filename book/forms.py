@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from .models import Message
 
 
 class SignUpForm(forms.Form):
@@ -64,3 +65,31 @@ class UserProfileForm(forms.Form):
         if self.data['password'] != self.data.get('confirm_password'):
             raise forms.ValidationError("Passwords don't match")
         return self.data['confirm_password']
+
+
+class MessageForm(forms.Form):
+    text = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': '6'}))
+
+    def __init__(self, *args, **kwargs):
+        receiver_ids = kwargs.pop('receiver_ids', [])
+        super(MessageForm, self).__init__(*args, **kwargs)
+        self.fields['receiver_id'] = forms.ChoiceField(
+            choices=receiver_ids,
+            widget=forms.Select(attrs={'class': 'form-control'})
+        )
+
+'''
+class MessageForm(forms.ModelForm):
+
+    class Meta:
+        model = Message
+        fields = ('receiver', 'text',)
+    #receiver = forms.ModelChoiceField(queryset=User.objects.none())
+    #text = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': '6'}))
+
+    def __init__(self, *args, **kwargs):
+        qs = kwargs.pop('receivers', None)
+        super(MessageForm, self).__init__(*args, **kwargs)
+        if qs:
+            self.fields['receiver'].queryset = qs
+'''

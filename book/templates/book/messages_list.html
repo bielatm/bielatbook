@@ -1,6 +1,7 @@
 {% extends 'book/base.html' %}
 
 {% block content %}
+    <a class="btn btn-default" href="{% url 'new_message' %}"><span class="glyphicon glyphicon-envelope"></span> Send new message</a>
     {% for message in messages_from_friends %}
         <div>
             <h1>{{ message.author }}</h1>

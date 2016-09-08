@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^accept-invitations/$', views.accept_invitations, name='accept_invitations'),
     url(r'^friends/$', views.friends_list, name='friends_list'),
     url(r'^messages/$', views.messages_list, name='messages_list'),
+    url(r'^new_message/$', views.new_message, name='new_message'),
 ]
