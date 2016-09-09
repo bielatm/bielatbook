@@ -2,10 +2,20 @@
 
 {% block content %}
     <a class="btn btn-default" href="{% url 'new_message' %}"><span class="glyphicon glyphicon-envelope"></span> Send new message</a>
-    {% for message in messages_from_friends %}
-        <div>
-            <h1><a href="{% url 'message_detail' pk=message.pk %}">{{ message.author }}</a></h1>
-            <p>{{ message.text|truncatechars:200 }}</p>
+    <br/><br/>
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="list-group">
+                {% for message in messages_from_friends %}
+                    <a href="{% url 'message_detail' pk=message.pk %}" class="list-group-item">
+                        <div class="date">
+                            {{ message.date_of_sending_message }}
+                        </div>
+                        <h3 class="list-group-item-heading">{{ message.author.first_name }} {{ message.author.last_name }}</h3>
+                        <p class="list-group-item-text">{{ message.text|truncatechars:200 }}</p>
+                    </a>
+                {% endfor %}
+            </div>
         </div>
-    {% endfor %}
+    </div>
 {% endblock %}

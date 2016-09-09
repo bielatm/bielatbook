@@ -37,3 +37,16 @@ h1, h2, h3, h4 {
 .welcome {
     font-family: 'Pacifico';
 }
+
+.message {
+    margin-bottom: 50px;
+}
+
+.message h1 a, .message h1 a:visited {
+    color: black;
+}
+
+.date {
+    float: right;
+    color: grey;
+}

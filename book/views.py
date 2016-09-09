@@ -149,7 +149,7 @@ def friends_list(request):
 @login_required
 def messages_list(request):
     user = request.user
-    messages_from_friends = user.messages.all()
+    messages_from_friends = user.messages.all().order_by('-date_of_sending_message')
     return render(request, 'book/messages_list.html', {'messages_from_friends': messages_from_friends})
 
 
