@@ -12,4 +12,6 @@ urlpatterns = [
     url(r'^friends/$', views.friends_list, name='friends_list'),
     url(r'^messages/$', views.messages_list, name='messages_list'),
     url(r'^new_message/$', views.new_message, name='new_message'),
+    url(r'^message/(?P<pk>\d+)$', views.message_detail, name='message_detail'),
+    url(r'^message/(?P<pk>\d+)/remove/$', views.message_remove, name='message_remove'),
 ]

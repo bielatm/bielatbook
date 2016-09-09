@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import SignUpForm, UserProfileForm, MessageForm
 from django.contrib.auth.models import User
 from .models import UserProfile, FriendshipInvite, Friendship, Message
@@ -153,6 +153,7 @@ def messages_list(request):
     return render(request, 'book/messages_list.html', {'messages_from_friends': messages_from_friends})
 
 
+@login_required
 def new_message(request):
     user = request.user
     friends = [f.user for f in user.friendships.all()]
@@ -163,7 +164,21 @@ def new_message(request):
                               text=form.cleaned_data.get('text'),
                               receiver_id=form.cleaned_data.get('receiver_id'))
             message.save()
-            return redirect('friends_list')
+            messages.add_message(request, messages.INFO, 'Your message has been sent.')
+            return redirect('new_message')
     else:
         form = MessageForm(receiver_ids=[(f.id, '{0} {1}'.format(f.first_name, f.last_name)) for f in friends])
     return render(request, 'book/new_message.html', {'form': form, 'friends': friends})
+
+
+@login_required
+def message_detail(request, pk):
+    message = get_object_or_404(Message, pk=pk)
+    return render(request, 'book/message_detail.html', {'message': message})
+
+
+@login_required
+def message_remove(request, pk):
+    message = get_object_or_404(Message, pk=pk)
+    message.delete()
+    return redirect('book.views.messages_list')

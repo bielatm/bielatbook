@@ -4,8 +4,8 @@
     <a class="btn btn-default" href="{% url 'new_message' %}"><span class="glyphicon glyphicon-envelope"></span> Send new message</a>
     {% for message in messages_from_friends %}
         <div>
-            <h1>{{ message.author }}</h1>
-            <p>{{ message.text }}</p>
+            <h1><a href="{% url 'message_detail' pk=message.pk %}">{{ message.author }}</a></h1>
+            <p>{{ message.text|truncatechars:200 }}</p>
         </div>
     {% endfor %}
 {% endblock %}

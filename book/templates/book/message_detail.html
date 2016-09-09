@@ -1,0 +1,10 @@
+{% extends 'book/base.html' %}
+
+{% block content %}
+    <div>
+        <a class="btn btn-default" href="{% url 'messages_list' %}"><span class="glyphicon glyphicon-arrow-left"></span> All messages</a>
+        <a class="btn btn-default" href="{% url 'message_remove' pk=message.pk %}"><span class="glyphicon glyphicon-remove"></span> Remove</a>
+        <h1>{{ message.author }}</h1>
+        <p>{{ message.text }}</p>
+    </div>
+{% endblock %}
