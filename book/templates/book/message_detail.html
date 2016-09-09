@@ -1,13 +1,17 @@
 {% extends 'book/base.html' %}
 
 {% block content %}
-    <a class="btn btn-default" href="{% url 'messages_list' %}"><span class="glyphicon glyphicon-arrow-left"></span> All messages</a>
-    <a class="btn btn-default" href="{% url 'message_remove' pk=message.pk %}"><span class="glyphicon glyphicon-remove"></span> Remove</a>
+    <a class="btn btn-default" href="{% url 'friend_messages' pk=message.author.pk %}">
+        <span class="glyphicon glyphicon-arrow-left"></span> Messages from {{ message.author.first_name }}
+    </a>
+    <a class="btn btn-default" href="{% url 'message_remove' pk=message.pk %}">
+        <span class="glyphicon glyphicon-remove"></span> Remove
+    </a>
     <div class="row">
         <div class="col-xs-5">
             <div class="message">
                 <div class="date">
-                    {{ message.date_of_sending_message }}
+                    {{ message.created_at }}
                 </div>
                 <h1>{{ message.author.first_name }}</h1>
                 <p>{{ message.text }}</p>

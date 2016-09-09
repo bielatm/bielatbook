@@ -149,7 +149,9 @@ def friends_list(request):
 @login_required
 def messages_list(request):
     user = request.user
-    messages_from_friends = user.messages.all().order_by('-date_of_sending_message')
+    #messages_from_friends = user.messages.all().order_by('-created_at')
+    messages_from_friends = user.messages.order_by('author', '-created_at').distinct('author')
+    messages_from_friends = sorted(messages_from_friends, key=lambda x: x.created_at, reverse=True)
     return render(request, 'book/messages_list.html', {'messages_from_friends': messages_from_friends})
 
 
@@ -182,3 +184,11 @@ def message_remove(request, pk):
     message = get_object_or_404(Message, pk=pk)
     message.delete()
     return redirect('book.views.messages_list')
+
+
+@login_required
+def friend_messages(request, pk):
+    user = request.user
+    friend = get_object_or_404(User, pk=pk)
+    messages_from_friend = user.messages.filter(author=friend).order_by('-created_at')
+    return render(request, 'book/friend_messages.html', {'messages_from_friend': messages_from_friend, 'friend': friend})

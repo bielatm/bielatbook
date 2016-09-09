@@ -1,0 +1,21 @@
+{% extends 'book/base.html' %}
+
+{% block content %}
+    <a class="btn btn-default" href="{% url 'messages_list' %}"><span class="glyphicon glyphicon-arrow-left"></span> All messages</a>
+    <h1>{{ friend.first_name }} {{ friend.last_name }}</h1>
+    <br/>
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="list-group">
+                {% for message in messages_from_friend %}
+                    <a href="{% url 'message_detail' pk=message.pk %}" class="list-group-item">
+                        <div class="date">
+                            {{ message.created_at }}
+                        </div>
+                        <p class="list-group-item-text">{{ message.text }}</p>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

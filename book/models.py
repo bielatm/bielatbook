@@ -27,4 +27,4 @@ class Message(models.Model):
     author = models.ForeignKey('auth.User')
     text = models.TextField()
     receiver = models.ForeignKey('auth.User', related_name='messages')
-    date_of_sending_message = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(default=timezone.now)
