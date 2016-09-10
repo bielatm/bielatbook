@@ -29,13 +29,13 @@
                 <div class="col-xs-4">
                     <form method="post" action="{% url 'register' %}">
                         {% csrf_token %}
-                        <div class="text-success">
-                            {% for message in messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-success" role="alert">
                                 {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
                                     {{ message }}
                                 {% endif %}
-                            {% endfor %}
-                        </div>
+                            </div>
+                        {% endfor %}
                         <br/>
                         <div class="form-group">
                             {{ form.username }}

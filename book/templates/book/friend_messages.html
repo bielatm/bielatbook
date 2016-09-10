@@ -6,16 +6,16 @@
     <br/>
     <div class="row">
         <div class="col-xs-6">
-            <div class="list-group">
-                {% for message in messages_from_friend %}
-                    <a href="{% url 'message_detail' pk=message.pk %}" class="list-group-item">
+            <ul class="list-group">
+                {% for message in all_messages %}
+                    <li class="list-group-item">
                         <div class="date">
                             {{ message.created_at }}
                         </div>
-                        <p class="list-group-item-text">{{ message.text }}</p>
-                    </a>
+                        <b>{{ message.author.first_name }}:</b> {{ message.text }}
+                    </li>
                 {% endfor %}
-            </div>
+            </ul>
         </div>
     </div>
 {% endblock %}

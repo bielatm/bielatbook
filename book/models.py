@@ -24,7 +24,7 @@ class Friendship(models.Model):
 
 
 class Message(models.Model):
-    author = models.ForeignKey('auth.User')
+    author = models.ForeignKey('auth.User', related_name='sent_messages')
     text = models.TextField()
-    receiver = models.ForeignKey('auth.User', related_name='messages')
+    receiver = models.ForeignKey('auth.User', related_name='received_messages')
     created_at = models.DateTimeField(default=timezone.now)

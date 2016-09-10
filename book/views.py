@@ -9,6 +9,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from itertools import chain
 
 
 def register(request):
@@ -150,7 +151,7 @@ def friends_list(request):
 def messages_list(request):
     user = request.user
     #messages_from_friends = user.messages.all().order_by('-created_at')
-    messages_from_friends = user.messages.order_by('author', '-created_at').distinct('author')
+    messages_from_friends = user.received_messages.order_by('author', '-created_at').distinct('author')
     messages_from_friends = sorted(messages_from_friends, key=lambda x: x.created_at, reverse=True)
     return render(request, 'book/messages_list.html', {'messages_from_friends': messages_from_friends})
 
@@ -174,21 +175,10 @@ def new_message(request):
 
 
 @login_required
-def message_detail(request, pk):
-    message = get_object_or_404(Message, pk=pk)
-    return render(request, 'book/message_detail.html', {'message': message})
-
-
-@login_required
-def message_remove(request, pk):
-    message = get_object_or_404(Message, pk=pk)
-    message.delete()
-    return redirect('book.views.messages_list')
-
-
-@login_required
 def friend_messages(request, pk):
     user = request.user
     friend = get_object_or_404(User, pk=pk)
-    messages_from_friend = user.messages.filter(author=friend).order_by('-created_at')
-    return render(request, 'book/friend_messages.html', {'messages_from_friend': messages_from_friend, 'friend': friend})
+    received_messages = user.received_messages.filter(author=friend)
+    sent_messages = user.sent_messages.filter(receiver=friend)
+    all_messages = sorted(list(chain(received_messages, sent_messages)), key=lambda x: x.created_at, reverse=True)
+    return render(request, 'book/friend_messages.html', {'all_messages': all_messages, 'friend': friend})
