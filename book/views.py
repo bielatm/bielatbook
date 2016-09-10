@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import SignUpForm, UserProfileForm, MessageForm
+from .forms import SignUpForm, UserProfileForm, MessageForm, InputMessageForm
 from django.contrib.auth.models import User
 from .models import UserProfile, FriendshipInvite, Friendship, Message
 from django.contrib.auth import authenticate, login, logout
@@ -150,7 +150,6 @@ def friends_list(request):
 @login_required
 def messages_list(request):
     user = request.user
-    #messages_from_friends = user.messages.all().order_by('-created_at')
     messages_from_friends = user.received_messages.order_by('author', '-created_at').distinct('author')
     messages_from_friends = sorted(messages_from_friends, key=lambda x: x.created_at, reverse=True)
     return render(request, 'book/messages_list.html', {'messages_from_friends': messages_from_friends})
@@ -160,7 +159,7 @@ def messages_list(request):
 def new_message(request):
     user = request.user
     friends = [f.user for f in user.friendships.all()]
-    if request.method == "POST":
+    if request.method == 'POST':
         form = MessageForm(request.POST, receiver_ids=[(f.id, '{0} {1}'.format(f.first_name, f.last_name)) for f in friends])
         if form.is_valid():
             message = Message(author=user,
@@ -181,4 +180,14 @@ def friend_messages(request, pk):
     received_messages = user.received_messages.filter(author=friend)
     sent_messages = user.sent_messages.filter(receiver=friend)
     all_messages = sorted(list(chain(received_messages, sent_messages)), key=lambda x: x.created_at, reverse=True)
-    return render(request, 'book/friend_messages.html', {'all_messages': all_messages, 'friend': friend})
+    if request.method == 'POST':
+        form = InputMessageForm(request.POST)
+        if form.is_valid():
+            message = Message(author=user,
+                              text=form.cleaned_data.get('text'),
+                              receiver=friend)
+            message.save()
+            return redirect('friend_messages', pk=friend.pk)
+    else:
+        form = InputMessageForm()
+    return render(request, 'book/friend_messages.html', {'all_messages': all_messages, 'friend': friend, 'form': form})

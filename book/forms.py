@@ -78,18 +78,12 @@ class MessageForm(forms.Form):
             widget=forms.Select(attrs={'class': 'form-control'})
         )
 
-'''
-class MessageForm(forms.ModelForm):
+
+class InputMessageForm(forms.ModelForm):
 
     class Meta:
         model = Message
-        fields = ('receiver', 'text',)
-    #receiver = forms.ModelChoiceField(queryset=User.objects.none())
-    #text = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': '6'}))
-
-    def __init__(self, *args, **kwargs):
-        qs = kwargs.pop('receivers', None)
-        super(MessageForm, self).__init__(*args, **kwargs)
-        if qs:
-            self.fields['receiver'].queryset = qs
-'''
+        fields = ('text',)
+        widgets = {
+            'text': forms.Textarea(attrs={'class': 'form-control', 'rows': '2'})
+        }

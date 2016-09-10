@@ -6,6 +6,18 @@
     <br/>
     <div class="row">
         <div class="col-xs-6">
+            <form method="post" action="{% url 'friend_messages' pk=friend.pk %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.text }}
+                    <div class="text-danger">
+                        {{ form.text.errors }}
+                    </div>
+                </div>
+                <div align="right">
+                    <button type="submit" class="btn btn-success">Reply</button>
+                </div>
+            </form>
             <ul class="list-group">
                 {% for message in all_messages %}
                     <li class="list-group-item">
