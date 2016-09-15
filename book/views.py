@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import SignUpForm, UserProfileForm, MessageForm, InputMessageForm
 from django.contrib.auth.models import User
-from .models import UserProfile, FriendshipInvite, Friendship, Message
+from .models import UserProfile, FriendshipInvite, Friendship, Message, Group, Post
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
@@ -191,3 +191,9 @@ def friend_messages(request, pk):
     else:
         form = InputMessageForm()
     return render(request, 'book/friend_messages.html', {'all_messages': all_messages, 'friend': friend, 'form': form})
+
+
+@login_required
+def groups_list(request):
+    groups = Group.objects.all()
+    return render(request, 'book/groups_list.html', {'groups': groups})

@@ -3,6 +3,8 @@
 {% block content %}
     <a class="btn btn-default" href="{% url 'new_message' %}"><span class="glyphicon glyphicon-envelope"></span> Send new message</a>
     <br/><br/>
+
+    {% if messages_from_friends %}
     <div class="row">
         <div class="col-xs-6">
             <div class="list-group">
@@ -18,4 +20,7 @@
             </div>
         </div>
     </div>
+    {% else %}
+        <h1>You have no message yet.</h1>
+    {% endif %}
 {% endblock %}

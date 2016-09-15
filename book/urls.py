@@ -13,4 +13,6 @@ urlpatterns = [
     url(r'^messages/$', views.messages_list, name='messages_list'),
     url(r'^new_message/$', views.new_message, name='new_message'),
     url(r'^message/friend/(?P<pk>\d+)$', views.friend_messages, name='friend_messages'),
+    url(r'^groups/$', views.groups_list, name='groups_list'),
+    # url(r'^group/(?P<pk>\d+)$', views.group_detail, name='group_detail'),
 ]

@@ -28,3 +28,14 @@ class Message(models.Model):
     text = models.TextField()
     receiver = models.ForeignKey('auth.User', related_name='received_messages')
     created_at = models.DateTimeField(default=timezone.now)
+
+
+class Group(models.Model):
+    admin = models.ForeignKey('auth.User')
+    name = models.CharField(max_length=50)
+
+
+class Post(models.Model):
+    group = models.ForeignKey(Group)
+    author = models.ForeignKey('auth.User')
+    text = models.TextField()
