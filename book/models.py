@@ -36,6 +36,11 @@ class Group(models.Model):
     description = models.TextField()
 
 
+class Membership(models.Model):
+    group = models.ForeignKey(Group)
+    user = models.ForeignKey('auth.User', related_name='user_memberships')
+
+
 class Post(models.Model):
     group = models.ForeignKey(Group)
     author = models.ForeignKey('auth.User')
