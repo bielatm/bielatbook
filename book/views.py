@@ -222,3 +222,11 @@ def group_detail(request, pk):
     user = request.user
     group = get_object_or_404(Group, pk=pk)
     return render(request, 'book/group_detail.html', {'group': group, 'user': user})
+
+
+@login_required
+def group_remove(request, pk):
+    group = get_object_or_404(Group, pk=pk)
+    if group.admin == request.user:
+        group.delete()
+    return redirect('book.views.groups_list')

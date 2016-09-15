@@ -31,8 +31,9 @@ class Message(models.Model):
 
 
 class Group(models.Model):
-    admin = models.ForeignKey('auth.User')
+    admin = models.ForeignKey('auth.User', related_name='user_groups')
     name = models.CharField(max_length=50)
+    description = models.TextField()
 
 
 class Post(models.Model):

@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^groups/$', views.groups_list, name='groups_list'),
     url(r'^new_group/$', views.new_group, name='new_group'),
     url(r'^group/(?P<pk>\d+)$', views.group_detail, name='group_detail'),
+    url(r'^group/(?P<pk>\d+)/remove$', views.group_remove, name='group_remove'),
 ]

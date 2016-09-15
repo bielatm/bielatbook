@@ -91,9 +91,12 @@ class InputMessageForm(forms.ModelForm):
 
 class GroupForm(forms.ModelForm):
 
+    description = forms.CharField(required=False, widget=forms.Textarea(attrs={'class': 'form-control',
+                                                                               'placeholder': 'Description'}))
+
     class Meta:
         model = Group
-        fields = ('name', )
+        fields = ('name', 'description',)
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'})
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Group name'})
         }
