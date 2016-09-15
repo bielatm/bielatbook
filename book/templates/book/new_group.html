@@ -1,0 +1,24 @@
+{% extends 'book/base.html' %}
+
+{% block content %}
+    <a class="btn btn-default" href="{% url 'groups_list' %}"><span class="glyphicon glyphicon-arrow-left"></span> All groups</a>
+    <br/><br/>
+    <h1>Enter name of your group:</h1>
+    <br/><br/>
+    <div class="row">
+        <div class="col-xs-4">
+            <form method="post" action="{% url 'new_group' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.name }}
+                    <div class="text-danger">
+                        {{ form.name.errors }}
+                    </div>
+                </div>
+                <div align="right">
+                    <button type="submit" class="btn btn-success">Create group</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Message
+from .models import Message, Group, Post
 
 
 class SignUpForm(forms.Form):
@@ -86,4 +86,14 @@ class InputMessageForm(forms.ModelForm):
         fields = ('text',)
         widgets = {
             'text': forms.Textarea(attrs={'class': 'form-control', 'rows': '2'})
+        }
+
+
+class GroupForm(forms.ModelForm):
+
+    class Meta:
+        model = Group
+        fields = ('name', )
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'})
         }

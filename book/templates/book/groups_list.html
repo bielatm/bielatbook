@@ -1,5 +1,23 @@
 {% extends 'book/base.html' %}
 
 {% block content %}
-<h1>Grupy</h1>
+    <a class="btn btn-success" href="{% url 'new_group' %}"><span class="glyphicon glyphicon-plus"></span> Create new group</a>
+    <br/><br/>
+    <h1>Grupy</h1>
+    <br/><br/>
+    {% if groups %}
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="list-group">
+                {% for group in groups %}
+                    <a href="" class="list-group-item">
+                        <h3 class="list-group-item-heading">{{ group.name }}</h3>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+        <h1>No groups here.</h1>
+    {% endif %}
 {% endblock %}

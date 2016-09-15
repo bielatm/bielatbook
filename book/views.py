@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import SignUpForm, UserProfileForm, MessageForm, InputMessageForm
+from .forms import SignUpForm, UserProfileForm, MessageForm, InputMessageForm, GroupForm
 from django.contrib.auth.models import User
 from .models import UserProfile, FriendshipInvite, Friendship, Message, Group, Post
 from django.contrib.auth import authenticate, login, logout
@@ -183,9 +183,12 @@ def friend_messages(request, pk):
     if request.method == 'POST':
         form = InputMessageForm(request.POST)
         if form.is_valid():
-            message = Message(author=user,
-                              text=form.cleaned_data.get('text'),
-                              receiver=friend)
+            # message = Message(author=user,
+            #                   text=form.cleaned_data.get('text'),
+            #                   receiver=friend)
+            message = form.save(commit=False)
+            message.author = user
+            message.receiver = friend
             message.save()
             return redirect('friend_messages', pk=friend.pk)
     else:
@@ -195,5 +198,27 @@ def friend_messages(request, pk):
 
 @login_required
 def groups_list(request):
-    groups = Group.objects.all()
+    groups = Group.objects.all().order_by('name')
     return render(request, 'book/groups_list.html', {'groups': groups})
+
+
+@login_required
+def new_group(request):
+    user = request.user
+    if request.method == 'POST':
+        form = GroupForm(request.POST)
+        if form.is_valid():
+            group = form.save(commit=False)
+            group.admin = user
+            group.save()
+            return redirect('groups_list')
+    else:
+        form = GroupForm()
+    return render(request, 'book/new_group.html', {'form': form})
+
+
+@login_required
+def group_detail(request, pk):
+    user = request.user
+    group = get_object_or_404(Group, pk=pk)
+    return render(request, 'book/group_detail.html', {'group': group, 'user': user})
