@@ -37,8 +37,8 @@ class Group(models.Model):
 
 
 class Membership(models.Model):
-    group = models.ForeignKey(Group)
-    user = models.ForeignKey('auth.User', related_name='user_memberships')
+    group = models.ForeignKey(Group, related_name='user_memberships')
+    user = models.ForeignKey('auth.User', related_name='group_memberships')
 
 
 class Post(models.Model):

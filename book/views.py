@@ -198,7 +198,7 @@ def friend_messages(request, pk):
 
 @login_required
 def groups_list(request):
-    groups = [g.group for g in request.user.user_memberships.all()]
+    groups = [g.group for g in request.user.group_memberships.all()]
     return render(request, 'book/groups_list.html', {'groups': groups})
 
 
@@ -223,6 +223,9 @@ def new_group(request):
 def group_detail(request, pk):
     user = request.user
     group = get_object_or_404(Group, pk=pk)
+    members = [u.user for u in group.user_memberships.all()]
+    if user not in members:
+        return redirect('groups_list')
     return render(request, 'book/group_detail.html', {'group': group, 'user': user})
 
 
@@ -232,3 +235,16 @@ def group_remove(request, pk):
     if group.admin == request.user:
         group.delete()
     return redirect('book.views.groups_list')
+
+
+@login_required
+def add_members(request, pk):
+    user = request.user
+    group = get_object_or_404(Group, pk=pk)
+    friends = [f.user for f in user.friendships.all()]
+    friends.sort(key=lambda x: x.first_name, reverse=False)
+    if request.method == 'POST':
+        membership = Membership(group_id=group.id, user_id=request.POST['friend_id'])
+        membership.save()
+        return redirect('add_members', pk=group.pk)
+    return render(request, 'book/add_members.html', {'friends': friends, 'group': group, 'user': user})

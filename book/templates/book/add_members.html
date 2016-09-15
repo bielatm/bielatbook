@@ -1,0 +1,28 @@
+{% extends 'book/base.html' %}
+
+{% block content %}
+    <h1>Add friends to group "{{ group.name }}"</h1>
+    <br/><br/>
+    <div class="row">
+        <div class="col-xs-6">
+            <ul class="list-group">
+                {% for friend in friends %}
+                    <li class="list-group-item">
+                        <div align="right">
+                            <form method="post" action="{% url 'add_members' pk=group.pk %}">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <input class="hidden" name="friend_id" value="{{ friend.id }}">
+                                    <button type="submit" class="btn btn-success">
+                                        <span class="glyphicon glyphicon-plus"></span> Add to group
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        {{ friend.first_name }} {{ friend.last_name }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

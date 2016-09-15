@@ -3,7 +3,8 @@
 {% block content %}
     <a class="btn btn-default" href="{% url 'groups_list' %}"><span class="glyphicon glyphicon-arrow-left"></span> All groups</a>
     {% if group.admin == user %}
-    <a class="btn btn-default" href="{% url 'group_remove' pk=group.pk %}"><span class="glyphicon glyphicon-remove"></span> Delete group</a>
+        <a class="btn btn-default" href="{% url 'group_remove' pk=group.pk %}"><span class="glyphicon glyphicon-remove"></span> Delete group</a>
+        <a class="btn btn-default" href="{% url 'add_members' pk=group.pk %}"><span class="glyphicon glyphicon-plus"></span> Add members</a>
     {% endif %}
     <h1>{{ group.name }}</h1>
     <p>{{ group.description }}</p>
