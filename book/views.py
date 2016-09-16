@@ -243,8 +243,13 @@ def add_members(request, pk):
     group = get_object_or_404(Group, pk=pk)
     friends = [f.user for f in user.friendships.all()]
     friends.sort(key=lambda x: x.first_name, reverse=False)
+    members = [u.user for u in group.user_memberships.all()]
+    uninvited_friends = list(set(friends)-set(members))
+    uninvited_friends.sort(key=lambda x: x.first_name, reverse=False)
+    if user not in members:
+        return redirect('groups_list')
     if request.method == 'POST':
         membership = Membership(group_id=group.id, user_id=request.POST['friend_id'])
         membership.save()
         return redirect('add_members', pk=group.pk)
-    return render(request, 'book/add_members.html', {'friends': friends, 'group': group, 'user': user})
+    return render(request, 'book/add_members.html', {'friends': uninvited_friends, 'group': group, 'user': user})
