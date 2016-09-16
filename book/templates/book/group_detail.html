@@ -6,6 +6,13 @@
         <a class="btn btn-default" href="{% url 'group_remove' pk=group.pk %}"><span class="glyphicon glyphicon-remove"></span> Delete group</a>
         <a class="btn btn-default" href="{% url 'add_members' pk=group.pk %}"><span class="glyphicon glyphicon-plus"></span> Add members</a>
     {% endif %}
-    <h1>{{ group.name }}</h1>
-    <p>{{ group.description }}</p>
+    <br/><br/>
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="jumbotron">
+                <h1>{{ group.name }}</h1>
+                <p>{{ group.description }}</p>
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -45,3 +45,4 @@ class Post(models.Model):
     group = models.ForeignKey(Group)
     author = models.ForeignKey('auth.User')
     text = models.TextField()
+    created_at = models.DateTimeField(default=timezone.now)

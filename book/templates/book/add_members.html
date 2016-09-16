@@ -1,6 +1,8 @@
 {% extends 'book/base.html' %}
 
 {% block content %}
+    <a class="btn btn-default" href="{% url 'group_detail' pk=group.pk %}"><span class="glyphicon glyphicon-arrow-left"></span> Group "{{ group.name }}"</a>
+    <br/><br/>
     <h1>Add friends to group "{{ group.name }}"</h1>
     <br/><br/>
     <div class="row">
