@@ -10,7 +10,7 @@
                 {% for group in groups %}
                     <a href="{% url 'group_detail' pk=group.pk %}" class="list-group-item">
                         <h3 class="list-group-item-heading">{{ group.name }}</h3>
-                        <p class="list-group-item-text">{{ group.description|truncatechars:200 }}</p>
+                        <p class="list-group-item-text">{{ group.description }}</p>
                     </a>
                 {% endfor %}
             </div>

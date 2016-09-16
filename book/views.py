@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import SignUpForm, UserProfileForm, MessageForm, InputMessageForm, GroupForm
+from .forms import SignUpForm, UserProfileForm, MessageForm, InputMessageForm, GroupForm, PostForm
 from django.contrib.auth.models import User
 from .models import UserProfile, FriendshipInvite, Friendship, Message, Group, Post, Membership
 from django.contrib.auth import authenticate, login, logout
@@ -224,9 +224,20 @@ def group_detail(request, pk):
     user = request.user
     group = get_object_or_404(Group, pk=pk)
     members = [u.user for u in group.user_memberships.all()]
+    posts = Post.objects.filter(group_id=pk).order_by('-created_at')
     if user not in members:
         return redirect('groups_list')
-    return render(request, 'book/group_detail.html', {'group': group, 'user': user})
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = user
+            post.group = group
+            post.save()
+            return redirect('group_detail', pk=group.pk)
+    else:
+        form = PostForm()
+    return render(request, 'book/group_detail.html', {'group': group, 'user': user, 'form': form, 'posts': posts})
 
 
 @login_required

@@ -13,6 +13,30 @@
                 <h1>{{ group.name }}</h1>
                 <p>{{ group.description }}</p>
             </div>
+            <form method="post" action="{% url 'group_detail' pk=group.pk %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.text }}
+                    <div class="text-danger">
+                        {{ form.text.errors }}
+                    </div>
+                </div>
+                <div align="right">
+                    <button type="submit" class="btn btn-success">Post</button>
+                </div>
+            </form>
+            <ul class="list-group">
+                {% for post in posts %}
+                    <li class="list-group-item">
+                        <div class="date">
+                            {{ post.created_at }}
+                        </div>
+                        <b>{{ post.author.first_name }}</b>
+                        <p>{{ post.text }}</p>
+                    </li>
+                    <br/>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 {% endblock %}
