@@ -233,6 +233,8 @@ def group_detail(request, pk):
 def group_remove(request, pk):
     group = get_object_or_404(Group, pk=pk)
     if group.admin == request.user:
+        for membership in group.user_memberships.all():
+            membership.delete()
         group.delete()
     return redirect('book.views.groups_list')
 
