@@ -42,7 +42,7 @@ class Membership(models.Model):
 
 
 class Post(models.Model):
-    group = models.ForeignKey(Group)
+    group = models.ForeignKey(Group, related_name='posts')
     author = models.ForeignKey('auth.User')
     text = models.TextField()
     created_at = models.DateTimeField(default=timezone.now)

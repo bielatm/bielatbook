@@ -246,6 +246,8 @@ def group_remove(request, pk):
     if group.admin == request.user:
         for membership in group.user_memberships.all():
             membership.delete()
+        for post in group.posts.all():
+            post.delete()
         group.delete()
     return redirect('book.views.groups_list')
 
